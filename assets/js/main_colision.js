@@ -1,109 +1,62 @@
-const canvas = document.getElementById("canvas");
-let ctx = canvas.getContext("2d");
+const canvas2 = document.getElementById("canvas2");
+const ctx2 = canvas2.getContext("2d");
 
-const window_height = window.innerHeight / 2;
-const window_width = window.innerWidth / 2;
+canvas2.width = 300;
+canvas2.height = 180;
 
-canvas.height = window_height;
-canvas.width = window_width;
-canvas.style.background = "#ff8";
+let circles2 = [];
 
-class Circle {
-    constructor(x, y, radius, color, text, speed) {
-        this.posX = x;
-        this.posY = y;
-        this.radius = radius;
-        this.baseColor = color; // color original
-        this.color = color;
-        this.text = text;
-        this.speed = speed;
-
-        this.dx = (Math.random() * 2 - 1) * this.speed;
-        this.dy = (Math.random() * 2 - 1) * this.speed;
-    }
-
-    draw(context) {
-        context.beginPath();
-
-        context.strokeStyle = this.color;
-        context.lineWidth = 2;
-
-        context.arc(this.posX, this.posY, this.radius, 0, Math.PI * 2);
-        context.stroke();
-
-        context.fillStyle = "black";
-        context.textAlign = "center";
-        context.textBaseline = "middle";
-        context.font = "20px Arial";
-        context.fillText(this.text, this.posX, this.posY);
-
-        context.closePath();
-    }
-
-    update(context) {
-        // Rebote solo con paredes
-        if ((this.posX + this.radius) > window_width || (this.posX - this.radius) < 0) {
-            this.dx *= -1;
-        }
-
-        if ((this.posY + this.radius) > window_height || (this.posY - this.radius) < 0) {
-            this.dy *= -1;
-        }
-
-        this.posX += this.dx;
-        this.posY += this.dy;
-
-        this.draw(context);
+function initColision(){
+    circles2=[];
+    for(let i=0;i<slider.value;i++){
+        circles2.push({
+            x:Math.random()*280,
+            y:Math.random()*160,
+            dx:(Math.random()-0.5)*3,
+            dy:(Math.random()-0.5)*3,
+            r:15,
+            base:"#3b82f6",
+            hit:"#f43f5e",
+            color:"#3b82f6",
+            id:i+1
+        });
     }
 }
 
-// 🔹 Crear N círculos
-const N = 10;
-let circles = [];
+function detectar(){
+    circles2.forEach(c=>c.color=c.base);
 
-for (let i = 0; i < N; i++) {
-    let radius = Math.random() * 30 + 20;
-    let x = Math.random() * (window_width - radius * 2) + radius;
-    let y = Math.random() * (window_height - radius * 2) + radius;
+    for(let i=0;i<circles2.length;i++){
+        for(let j=i+1;j<circles2.length;j++){
+            let dx=circles2[i].x-circles2[j].x;
+            let dy=circles2[i].y-circles2[j].y;
+            let dist=Math.sqrt(dx*dx+dy*dy);
 
-    circles.push(
-        new Circle(x, y, radius, "blue", i + 1, 2)
-    );
-}
-
-// 🔹 Detección de colisiones
-function detectarColisiones() {
-    // Resetear colores
-    circles.forEach(c => c.color = c.baseColor);
-
-    for (let i = 0; i < circles.length; i++) {
-        for (let j = i + 1; j < circles.length; j++) {
-            let c1 = circles[i];
-            let c2 = circles[j];
-
-            let dx = c1.posX - c2.posX;
-            let dy = c1.posY - c2.posY;
-
-            let distancia = Math.sqrt(dx * dx + dy * dy);
-
-            if (distancia <= (c1.radius + c2.radius)) {
-                // 🔴 Colisión → cambiar color
-                c1.color = "red";
-                c2.color = "red";
+            if(dist<30){
+                circles2[i].color=circles2[i].hit;
+                circles2[j].color=circles2[j].hit;
             }
         }
     }
 }
 
-// 🔹 Animación
-function update() {
-    requestAnimationFrame(update);
+function animate2(){
+    requestAnimationFrame(animate2);
+    ctx2.clearRect(0,0,300,180);
 
-    ctx.clearRect(0, 0, window_width, window_height);
+    circles2.forEach(c=>{
+        if(c.x<0||c.x>300)c.dx*=-1;
+        if(c.y<0||c.y>180)c.dy*=-1;
 
-    detectarColisiones();
+        c.x+=c.dx;
+        c.y+=c.dy;
+    });
 
-    circles.forEach(c => c.update(ctx));
+    detectar();
+    circles2.forEach(c=>draw(ctx2,c));
 }
 
-update();
+slider.oninput = initColision;
+
+initColision();
+animate2();

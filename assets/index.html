@@ -2,13 +2,65 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Demo Colision 2D</title>
+    <title>Simulación de Círculos</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="./css/styles.css">
+
+    <!-- FAVICON 🔥 -->
+    <link rel="icon" type="image/png" href="./img/cumpleanos.png">
 </head>
 <body>
-    
-    <canvas id="canvas"></canvas>
-    
+
+<!-- PARTÍCULAS -->
+<canvas id="particles"></canvas>
+
+<header>
+    <h1>Simulación de Círculos</h1>
+</header>
+
+<section class="hero">
+    <div class="text">
+        <h2>Simulador visual</h2>
+        <p>Movimiento, colisión y rebote en tiempo real</p>
+    </div>
+
+    <div class="control">
+        <label>Cantidad</label><br>
+        <input type="range" id="slider" min="2" max="20" value="8">
+        <span id="valor">8</span>
+    </div>
+</section>
+
+<section class="cards">
+
+    <div class="card">
+        <h3>Movimiento</h3>
+        <canvas id="canvas1"></canvas>
+    </div>
+
+    <div class="card">
+        <h3>Colisión</h3>
+        <canvas id="canvas2"></canvas>
+    </div>
+
+    <div class="card">
+        <h3>Rebote</h3>
+        <canvas id="canvas3"></canvas>
+    </div>
+
+</section>
+
+<!-- FOOTER 🔥 -->
+<footer>
+    <p>© 2026 Simulación de Círculos | Hecho con ❤️ y JavaScript</p>
+</footer>
+
+<!-- SCRIPTS -->
+<script src="./js/particles.js"></script>
+<script src="./js/main_movimiento.js"></script>
 <script src="./js/main_colision.js"></script>
+<script src="./js/main_rebote.js"></script>
+
 </body>
 </html>
